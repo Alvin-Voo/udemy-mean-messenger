@@ -1,18 +1,22 @@
 import { User } from "./user.model";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable} from "@angular/core";
 import { ErrorService } from "../errors/error.service";
 import { Observable } from "rxjs/Observable";
-import * as DOMAIN from "../config/config";
 import 'rxjs/add/observable/throw';
 
 @Injectable()
-export class AuthService{
+export class AuthService {
+  private DOMAIN = 'http://localhost:3000';
 
   constructor(private httpClient: HttpClient, private errorService: ErrorService){}
 
+  setDomain(domain){
+    this.DOMAIN = domain;
+  }
+
   signup(user: User){
-    return this.httpClient.post(DOMAIN.domain+'/user',user,
+    return this.httpClient.post(this.DOMAIN+'/user',user,
     {headers:{'Content-Type':'application/json'}, responseType: 'json', observe: 'body'})
     .catch(
       (errResp: HttpErrorResponse)=>{
@@ -23,7 +27,7 @@ export class AuthService{
   }
 
   signin(user: User){
-    return this.httpClient.post(DOMAIN.domain+'/user/signin',user,
+    return this.httpClient.post(this.DOMAIN+'/user/signin',user,
     {headers:{'Content-Type':'application/json'}, responseType: 'json', observe: 'body'})
     .catch(
       (errResp: HttpErrorResponse)=>{
