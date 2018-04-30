@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Message } from "./message.model";
 import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import * as DOMAIN from '../config/config';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw'
@@ -16,7 +17,7 @@ export class MessageService{
 
   addMessage(message: Message){
     // const body = JSON.stringify(message); //there's no need to stringify coz the method will help to convert object to json by default
-    return this.httpClient.post('http://localhost:3000/message',message,
+    return this.httpClient.post(DOMAIN.domain+'/message',message,
     {headers: {'Content-Type': 'application/json'},
     params:{'token':localStorage.getItem('token')?localStorage.getItem('token'):''},
     observe: 'body',
@@ -39,7 +40,7 @@ export class MessageService{
   }
 
   getMessage(){
-    return this.httpClient.get('http://localhost:3000/message',//unprotected route
+    return this.httpClient.get(DOMAIN.domain+'/message',//unprotected route
     {observe: 'body', responseType: 'json'})
     .map((respBody)=>{//response body when returned is automatically a javascript object
       let transformedMessages: Message[] = [];
@@ -63,7 +64,7 @@ export class MessageService{
   }
 
   updateMessage(message: Message){
-    return this.httpClient.patch('http://localhost:3000/message/'+message.messageId
+    return this.httpClient.patch(DOMAIN.domain+'/message/'+message.messageId
     ,message
     ,{headers: {'Content-Type': 'application/json'}
     ,params:{'token':localStorage.getItem('token')?localStorage.getItem('token'):''}
@@ -78,7 +79,7 @@ export class MessageService{
 
   deleteMessage(message: Message){
     this.messages.splice(this.messages.indexOf(message),1);
-    return this.httpClient.delete('http://localhost:3000/message/'+message.messageId,
+    return this.httpClient.delete(DOMAIN.domain+'/message/'+message.messageId,
     {headers: {'Content-Type': 'application/json'}
     ,params:{'token':localStorage.getItem('token')?localStorage.getItem('token'):''}
     ,observe: 'body', responseType: 'json'})
